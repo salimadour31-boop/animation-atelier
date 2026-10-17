@@ -1,0 +1,25 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Unit tests (frame ops, ZIP writer, i18n, project JSON)
+        run: node tests/core.test.js
+      - name: Install Playwright (uses the runner's Google Chrome)
+        run: npm install --no-audit --no-fund
+      - name: UI tests (desktop 1440×900 + mobile 390×844)
+        run: node tests/ui.test.js
