@@ -1,0 +1,111 @@
+/* i18n.js — Animation Atelier interface texts: French (default), English and Taqbaylit (Kabyle, Latin script).
+ * Each entry is [fr, en, kab]; placeholders look like {n}. The Kabyle texts are a first draft written with
+ * common, simple words — corrections from Kabyle speakers are very welcome. Original texts, MIT licence. */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.I18N = factory();
+})(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+  const S = {
+    skip: ['Aller au canevas', 'Skip to the canvas', 'Ddu ɣer telqimt'],
+    tagline: ['Animation image par image dans le navigateur — tout reste sur votre appareil', 'Frame-by-frame animation in your browser — everything stays on your device', 'Asmussu tugna s tugna deg yiminig — kullec yeqqim ɣur-k'],
+    language: ['Langue', 'Language', 'Tutlayt'],
+    help: ['Raccourcis', 'Shortcuts', 'Inegzumen'],
+    helpTitle: ['Raccourcis clavier (?)', 'Keyboard shortcuts (?)', 'Inegzumen n unasiw (?)'],
+    close: ['Fermer', 'Close', 'Mdel'],
+    newProject: ['Nouveau', 'New', 'Amaynut'],
+    newProjectTitle: ['Nouveau projet (efface l’animation actuelle)', 'New project (clears the current animation)', 'Asenfar amaynut (ad yekkes asmussu-agi)'],
+    newConfirm: ['Effacer toute l’animation et recommencer ?', 'Erase the whole animation and start over?', 'Ad tekkseḍ asmussu akk, ad tebduḍ seg tazwara ?'],
+    tools: ['Outils', 'Tools', 'Ifecka'],
+    brush: ['Pinceau (B)', 'Brush (B)', 'Imru (B)'],
+    eraser: ['Gomme (E)', 'Eraser (E)', 'Amsfaḍ (E)'],
+    size: ['Taille', 'Size', 'Teɣzi'],
+    color: ['Couleur', 'Colour', 'Ini'],
+    undo: ['Annuler (Ctrl+Z)', 'Undo (Ctrl+Z)', 'Sefsex (Ctrl+Z)'],
+    redo: ['Rétablir (Ctrl+Y)', 'Redo (Ctrl+Y)', 'Err-d (Ctrl+Y)'],
+    clearFrame: ['Effacer l’image', 'Clear frame', 'Sfeḍ tugna'],
+    stageLabel: ['Canevas de dessin de l’image courante', 'Drawing canvas for the current frame', 'Telqimt n usuneɣ n tugna-agi'],
+    timeline: ['Timeline', 'Timeline', 'Izirig n wakud'],
+    prevFrame: ['Image précédente (←)', 'Previous frame (←)', 'Tugna yezrin (←)'],
+    nextFrame: ['Image suivante (→)', 'Next frame (→)', 'Tugna d-iteddun (→)'],
+    play: ['Lecture (Espace)', 'Play (Space)', 'Urar (Tallunt)'],
+    pause: ['Pause (Espace)', 'Pause (Space)', 'Asteɛfu (Tallunt)'],
+    addFrame: ['Ajouter une image (N)', 'Add a frame (N)', 'Rnu tugna (N)'],
+    dupFrame: ['Dupliquer l’image (D)', 'Duplicate frame (D)', 'Sleg tugna (D)'],
+    delFrame: ['Supprimer l’image', 'Delete frame', 'Kkes tugna'],
+    moveLeft: ['Déplacer vers la gauche', 'Move left', 'Smutti ɣer zelmeḍ'],
+    moveRight: ['Déplacer vers la droite', 'Move right', 'Smutti ɣer yefus'],
+    frameN: ['Image {n}', 'Frame {n}', 'Tugna {n}'],
+    frameCount: ['Image {i} / {n}', 'Frame {i} / {n}', 'Tugna {i} / {n}'],
+    onion: ['Pelure d’oignon', 'Onion skin', 'Taqcert n uẓalim'],
+    onionToggle: ['Afficher (O)', 'Show (O)', 'Sken (O)'],
+    onionBefore: ['Images avant', 'Frames before', 'Tugniwin uqbel'],
+    onionAfter: ['Images après', 'Frames after', 'Tugniwin deffir'],
+    onionOpacity: ['Opacité', 'Opacity', 'Tibririt'],
+    playback: ['Lecture', 'Playback', 'Taɣuri'],
+    fps: ['Images / seconde', 'Frames per second', 'Tugniwin di tasint'],
+    loop: ['Boucle', 'Loop', 'Allus'],
+    pingpong: ['Ping-pong (aller-retour)', 'Ping-pong (back and forth)', 'Ping-pong (ddu d tuɣalin)'],
+    canvas: ['Format', 'Canvas', 'Telqimt'],
+    sizePreset: ['Taille du canevas', 'Canvas size', 'Teɣzi n telqimt'],
+    custom: ['Personnalisée', 'Custom', 'Tudmawant'],
+    background: ['Fond', 'Background', 'Agilal'],
+    transparent: ['Fond transparent', 'Transparent background', 'Agilal afrawan'],
+    reference: ['Référence (rotoscopie)', 'Reference (rotoscoping)', 'Tugna n ugilal (rotoscopie)'],
+    refLoad: ['Image ou vidéo…', 'Image or video…', 'Tugna neɣ tavidyut…'],
+    refLoadTitle: ['Importer une image ou une vidéo comme calque de fond', 'Import an image or a video as a background layer', 'Kter tugna neɣ tavidyut d agilal'],
+    refShow: ['Afficher la référence', 'Show reference', 'Sken tugna n ugilal'],
+    refOpacity: ['Opacité de la référence', 'Reference opacity', 'Tibririt n tugna n ugilal'],
+    refTime: ['Position dans la vidéo', 'Video position', 'Adeg deg tvidyut'],
+    refFollow: ['Suivre l’image courante (vidéo)', 'Follow the current frame (video)', 'Ḍfer tugna-agi (tavidyut)'],
+    refRemove: ['Retirer', 'Remove', 'Kkes'],
+    refInExport: ['Inclure dans les exports', 'Include in exports', 'Seddu deg yisifeḍ'],
+    export: ['Exporter', 'Export', 'Sifeḍ'],
+    exportWebm: ['Vidéo WebM', 'WebM video', 'Tavidyut WebM'],
+    exportSprite: ['Planche PNG (sprite sheet)', 'PNG sprite sheet', 'Tafelwit PNG (sprite)'],
+    exportZip: ['Séquence PNG (ZIP)', 'PNG sequence (ZIP)', 'Tagrumma PNG (ZIP)'],
+    exportLoops: ['Répétitions (vidéo)', 'Repeats (video)', 'Allus (tavidyut)'],
+    project: ['Projet', 'Project', 'Asenfar'],
+    saveProject: ['Enregistrer (JSON)', 'Save (JSON)', 'Sekles (JSON)'],
+    loadProject: ['Ouvrir (JSON)', 'Open (JSON)', 'Ldi (JSON)'],
+    autosaveNote: ['Sauvegarde automatique dans ce navigateur.', 'Autosaved in this browser.', 'Asekles awurman deg yiminig-agi.'],
+    shortcuts: ['Raccourcis clavier', 'Keyboard shortcuts', 'Inegzumen n unasiw'],
+    scPrevNext: ['Image précédente / suivante', 'Previous / next frame', 'Tugna yezrin / d-iteddun'],
+    scPlay: ['Lecture / pause', 'Play / pause', 'Urar / asteɛfu'],
+    scBrush: ['Pinceau', 'Brush', 'Imru'],
+    scEraser: ['Gomme', 'Eraser', 'Amsfaḍ'],
+    scOnion: ['Pelure d’oignon', 'Onion skin', 'Taqcert n uẓalim'],
+    scUndo: ['Annuler / rétablir', 'Undo / redo', 'Sefsex / err-d'],
+    scAdd: ['Ajouter / dupliquer une image', 'Add / duplicate a frame', 'Rnu / sleg tugna'],
+    scSize: ['Taille du pinceau − / +', 'Brush size − / +', 'Teɣzi n yimru − / +'],
+    space: ['Espace', 'Space', 'Tallunt'],
+    scHelp: ['Cette aide', 'This help', 'Tallalt-a'],
+    privacy: ['100 % local : aucun envoi, aucun suivi. Logiciel libre (MIT).', '100% local: no upload, no tracking. Free software (MIT).', '100 % deg yibenk-ik : ulac tuzna, ulac aḍfar. Aseɣẓan ilelli (MIT).'],
+    source: ['Code source', 'Source code', 'Tangalt taɣbalut'],
+    stAutosaved: ['Sauvegardé automatiquement', 'Autosaved', 'Yettwasekles s wudem awurman'],
+    stRestored: ['Projet précédent restauré', 'Previous project restored', 'Asenfar yezrin yuɣal-d'],
+    stLoaded: ['Projet ouvert', 'Project opened', 'Asenfar yeldi'],
+    stInvalid: ['Fichier non reconnu (projet Animation Atelier attendu)', 'File not recognised (Animation Atelier project expected)', 'Afaylu ur yettwassen ara'],
+    stNoWebm: ['Ce navigateur ne sait pas enregistrer de vidéo WebM (MediaRecorder absent). Utilisez la séquence PNG.', 'This browser cannot record WebM video (no MediaRecorder). Use the PNG sequence instead.', 'Iminig-agi ur yezmir ara ad yesekles tavidyut WebM. Seqdec tagrumma PNG.'],
+    stRecording: ['Enregistrement vidéo… {p} %', 'Recording video… {p}%', 'Asekles n tvidyut… {p} %'],
+    stExported: ['Exporté : {f}', 'Exported: {f}', 'Yettwasifeḍ : {f}'],
+    stExportFail: ['L’export a échoué', 'Export failed', 'Asifeḍ ur yeddi ara'],
+    stQuota: ['Animation trop lourde pour la sauvegarde automatique — enregistrez-la en JSON.', 'Animation too large for autosave — save it as JSON.', 'Asmussu meqqer aṭas i usekles awurman — sekles-it s JSON.'],
+    stLastFrame: ['Impossible de supprimer la dernière image', 'The last frame cannot be deleted', 'Ur tezmireḍ ara ad tekkseḍ tugna taneggarut'],
+    stRefLoaded: ['Référence chargée', 'Reference loaded', 'Tugna n ugilal tuli-d'],
+    stRefFail: ['Impossible de lire ce fichier', 'Cannot read this file', 'Ur yezmir ara ad yeɣer afaylu-agi'],
+    stResized: ['Canevas : {w}×{h}', 'Canvas: {w}×{h}', 'Telqimt : {w}×{h}'],
+    stCleared: ['Image effacée (Ctrl+Z pour annuler)', 'Frame cleared (Ctrl+Z to undo)', 'Tugna tettwasfeḍ (Ctrl+Z i usefsex)'],
+    stNew: ['Nouveau projet', 'New project', 'Asenfar amaynut'],
+  };
+  const LANGS = ['fr', 'en', 'kab'];
+  const NAMES = { fr: 'Français', en: 'English', kab: 'Taqbaylit' };
+  /** Translate `key` into `lang`, replacing {placeholders} from `vars`. Falls back to French, then to the key. */
+  function t(lang, key, vars) {
+    const e = S[key];
+    let s = e ? e[Math.max(0, LANGS.indexOf(lang))] || e[0] : key;
+    if (vars) s = s.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? String(vars[k]) : m));
+    return s;
+  }
+  return { S, LANGS, NAMES, t };
+});

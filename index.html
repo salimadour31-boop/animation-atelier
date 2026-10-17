@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Animation Atelier — animation image par image</title>
+  <meta name="description" content="Studio libre d’animation image par image dans le navigateur : dessin au stylet, timeline, pelure d’oignon, lecture, rotoscopie, export WebM / planche PNG / séquence PNG (ZIP). Rien n’est envoyé.">
+  <meta name="theme-color" content="#0e0f14">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Original interface icons (inline SVG symbols, drawn for this project). -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-brush" viewBox="0 0 24 24"><path d="M14.5 3.5l6 6-9 9-4-2-2-4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M5.5 12.5c-2 1-2.5 4-3 8 4-.5 7-1 8-3" fill="currentColor"/></symbol>
+    <symbol id="i-eraser" viewBox="0 0 24 24"><path d="M3 15l9-9 7 7-6 6H7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8 10l7 7M13 19h8" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 6L4 11l5 5M4 11h10a6 6 0 010 12h-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" transform="translate(0 -3)"/></symbol>
+    <symbol id="i-redo" viewBox="0 0 24 24"><path d="M15 6l5 5-5 5M20 11H10a6 6 0 000 12h3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" transform="translate(0 -3)"/></symbol>
+    <symbol id="i-clear" viewBox="0 0 24 24"><path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+    <symbol id="i-prev" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="i-next" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z" fill="currentColor"/></symbol>
+    <symbol id="i-add" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8.5v7M8.5 12h7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-dup" viewBox="0 0 24 24"><rect x="7" y="7" width="14" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 15V5h13" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="i-del" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 9l6 6M15 9l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="M20 12H5M10 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="M4 12h15M14 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-onion" viewBox="0 0 24 24"><circle cx="9" cy="12" r="6" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".45"/><circle cx="15" cy="12" r="6" fill="none" stroke="currentColor" stroke-width="2.2"/></symbol>
+  </svg>
+
+  <a class="skip" href="#stage" data-i18n="skip">Aller au canevas</a>
+  <header class="top">
+    <div class="brand">
+      <img src="icons/icon.svg" alt="" width="36" height="36">
+      <div>
+        <h1>Animation <span>Atelier</span></h1>
+        <p class="tagline" data-i18n="tagline">Animation image par image dans le navigateur — tout reste sur votre appareil</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <label class="inline"><span data-i18n="language">Langue</span>
+        <select id="lang">
+          <option value="fr">Français</option>
+          <option value="en">English</option>
+          <option value="kab">Taqbaylit</option>
+        </select>
+      </label>
+      <button type="button" id="newBtn" class="btn" data-i18n="newProject" data-i18n-title="newProjectTitle" title="Nouveau projet (efface l’animation actuelle)">Nouveau</button>
+      <button type="button" id="helpBtn" class="btn" data-i18n="help" data-i18n-title="helpTitle" title="Raccourcis clavier (?)">Raccourcis</button>
+    </div>
+  </header>
+
+  <main class="app">
+    <!-- Drawing tools -->
+    <section class="tools" aria-labelledby="hTools">
+      <h2 id="hTools" class="sr-only" data-i18n="tools">Outils</h2>
+      <div class="tool-group" role="radiogroup" aria-labelledby="hTools">
+        <button type="button" class="icon-btn" id="toolBrush" role="radio" aria-checked="true" data-i18n-title="brush" data-i18n-aria="brush" title="Pinceau (B)" aria-label="Pinceau (B)"><svg><use href="#i-brush"/></svg></button>
+        <button type="button" class="icon-btn" id="toolEraser" role="radio" aria-checked="false" data-i18n-title="eraser" data-i18n-aria="eraser" title="Gomme (E)" aria-label="Gomme (E)"><svg><use href="#i-eraser"/></svg></button>
+      </div>
+      <label class="color-pick" data-i18n-title="color" title="Couleur"><span class="sr-only" data-i18n="color">Couleur</span><input type="color" id="color" value="#1b1d29"></label>
+      <div class="swatches" id="swatches" aria-hidden="false"></div>
+      <label class="size-pick"><span data-i18n="size">Taille</span> <output id="sizeOut">6</output>
+        <input type="range" id="size" min="1" max="80" value="6">
+      </label>
+      <div class="tool-group">
+        <button type="button" class="icon-btn" id="undoBtn" data-i18n-title="undo" data-i18n-aria="undo" title="Annuler (Ctrl+Z)" aria-label="Annuler (Ctrl+Z)"><svg><use href="#i-undo"/></svg></button>
+        <button type="button" class="icon-btn" id="redoBtn" data-i18n-title="redo" data-i18n-aria="redo" title="Rétablir (Ctrl+Y)" aria-label="Rétablir (Ctrl+Y)"><svg><use href="#i-redo"/></svg></button>
+        <button type="button" class="icon-btn" id="clearBtn" data-i18n-title="clearFrame" data-i18n-aria="clearFrame" title="Effacer l’image" aria-label="Effacer l’image"><svg><use href="#i-clear"/></svg></button>
+      </div>
+    </section>
+
+    <!-- Canvas -->
+    <section class="stage" id="stage" tabindex="-1">
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="view" width="1280" height="720" role="img" data-i18n-aria="stageLabel" aria-label="Canevas de dessin de l’image courante"></canvas>
+      </div>
+      <p class="frame-badge" id="frameBadge" aria-live="polite">Image 1 / 1</p>
+    </section>
+
+    <!-- Timeline -->
+    <section class="timeline" aria-labelledby="hTimeline">
+      <div class="tl-bar">
+        <h2 id="hTimeline" data-i18n="timeline">Timeline</h2>
+        <div class="tl-controls">
+          <button type="button" class="icon-btn" id="prevBtn" data-i18n-title="prevFrame" data-i18n-aria="prevFrame" title="Image précédente (←)" aria-label="Image précédente (←)"><svg><use href="#i-prev"/></svg></button>
+          <button type="button" class="icon-btn play" id="playBtn" data-i18n-title="play" data-i18n-aria="play" title="Lecture (Espace)" aria-label="Lecture (Espace)" aria-pressed="false"><svg><use href="#i-play"/></svg></button>
+          <button type="button" class="icon-btn" id="nextBtn" data-i18n-title="nextFrame" data-i18n-aria="nextFrame" title="Image suivante (→)" aria-label="Image suivante (→)"><svg><use href="#i-next"/></svg></button>
+          <span class="sep" aria-hidden="true"></span>
+          <button type="button" class="icon-btn" id="addBtn" data-i18n-title="addFrame" data-i18n-aria="addFrame" title="Ajouter une image (N)" aria-label="Ajouter une image (N)"><svg><use href="#i-add"/></svg></button>
+          <button type="button" class="icon-btn" id="dupBtn" data-i18n-title="dupFrame" data-i18n-aria="dupFrame" title="Dupliquer l’image (D)" aria-label="Dupliquer l’image (D)"><svg><use href="#i-dup"/></svg></button>
+          <button type="button" class="icon-btn" id="delBtn" data-i18n-title="delFrame" data-i18n-aria="delFrame" title="Supprimer l’image" aria-label="Supprimer l’image"><svg><use href="#i-del"/></svg></button>
+          <button type="button" class="icon-btn" id="leftBtn" data-i18n-title="moveLeft" data-i18n-aria="moveLeft" title="Déplacer vers la gauche" aria-label="Déplacer vers la gauche"><svg><use href="#i-left"/></svg></button>
+          <button type="button" class="icon-btn" id="rightBtn" data-i18n-title="moveRight" data-i18n-aria="moveRight" title="Déplacer vers la droite" aria-label="Déplacer vers la droite"><svg><use href="#i-right"/></svg></button>
+          <span class="sep" aria-hidden="true"></span>
+          <button type="button" class="icon-btn" id="onionBtn" aria-pressed="true" data-i18n-title="onion" data-i18n-aria="onion" title="Pelure d’oignon" aria-label="Pelure d’oignon"><svg><use href="#i-onion"/></svg></button>
+        </div>
+      </div>
+      <ol class="frames" id="frames" data-i18n-aria="timeline" aria-label="Timeline"></ol>
+    </section>
+
+    <!-- Settings panel -->
+    <aside class="panel">
+      <details open>
+        <summary data-i18n="onion">Pelure d’oignon</summary>
+        <label class="check"><input type="checkbox" id="onionOn" checked> <span data-i18n="onionToggle">Afficher (O)</span></label>
+        <label class="row"><span data-i18n="onionBefore">Images avant</span><input type="number" id="onionBefore" min="0" max="5" value="1"></label>
+        <label class="row"><span data-i18n="onionAfter">Images après</span><input type="number" id="onionAfter" min="0" max="5" value="1"></label>
+        <label class="row"><span data-i18n="onionOpacity">Opacité</span><input type="range" id="onionOpacity" min="5" max="100" value="35"></label>
+      </details>
+      <details open>
+        <summary data-i18n="playback">Lecture</summary>
+        <label class="row"><span><span data-i18n="fps">Images / seconde</span> <output id="fpsOut">12</output></span><input type="range" id="fps" min="1" max="30" value="12"></label>
+        <label class="check"><input type="checkbox" id="loop" checked> <span data-i18n="loop">Boucle</span></label>
+        <label class="check"><input type="checkbox" id="pingpong"> <span data-i18n="pingpong">Ping-pong (aller-retour)</span></label>
+      </details>
+      <details open>
+        <summary data-i18n="canvas">Format</summary>
+        <label class="row"><span data-i18n="sizePreset">Taille du canevas</span>
+          <select id="sizePreset">
+            <option value="16:9">16:9 — 1280×720</option>
+            <option value="1:1">1:1 — 1080×1080</option>
+            <option value="9:16">9:16 — 720×1280</option>
+            <option value="2.39:1">2.39:1 — 1280×536</option>
+            <option value="custom" data-i18n="custom" hidden>Personnalisée</option>
+          </select>
+        </label>
+        <label class="row"><span data-i18n="background">Fond</span><input type="color" id="bgColor" value="#f4efe6"></label>
+        <label class="check"><input type="checkbox" id="bgTransparent"> <span data-i18n="transparent">Fond transparent</span></label>
+      </details>
+      <details>
+        <summary data-i18n="reference">Référence (rotoscopie)</summary>
+        <label class="btn file" data-i18n-title="refLoadTitle" title="Importer une image ou une vidéo comme calque de fond"><span data-i18n="refLoad">Image ou vidéo…</span><input type="file" id="refFile" accept="image/*,video/*"></label>
+        <div id="refControls" hidden>
+          <label class="check"><input type="checkbox" id="refShow" checked> <span data-i18n="refShow">Afficher la référence</span></label>
+          <label class="row"><span data-i18n="refOpacity">Opacité de la référence</span><input type="range" id="refOpacity" min="5" max="100" value="50"></label>
+          <div id="refVideo" hidden>
+            <label class="row"><span data-i18n="refTime">Position dans la vidéo</span><input type="range" id="refTime" min="0" max="1" step="0.01" value="0"></label>
+            <label class="check"><input type="checkbox" id="refFollow"> <span data-i18n="refFollow">Suivre l’image courante (vidéo)</span></label>
+          </div>
+          <label class="check"><input type="checkbox" id="refInExport"> <span data-i18n="refInExport">Inclure dans les exports</span></label>
+          <button type="button" class="btn" id="refRemove" data-i18n="refRemove">Retirer</button>
+        </div>
+      </details>
+      <details open>
+        <summary data-i18n="export">Exporter</summary>
+        <div class="stack">
+          <button type="button" class="btn primary" id="exportWebm" data-i18n="exportWebm">Vidéo WebM</button>
+          <label class="row"><span data-i18n="exportLoops">Répétitions (vidéo)</span><input type="number" id="exportLoops" min="1" max="10" value="1"></label>
+          <button type="button" class="btn" id="exportSprite" data-i18n="exportSprite">Planche PNG (sprite sheet)</button>
+          <button type="button" class="btn" id="exportZip" data-i18n="exportZip">Séquence PNG (ZIP)</button>
+        </div>
+      </details>
+      <details open>
+        <summary data-i18n="project">Projet</summary>
+        <div class="stack">
+          <button type="button" class="btn" id="saveBtn" data-i18n="saveProject">Enregistrer (JSON)</button>
+          <label class="btn file"><span data-i18n="loadProject">Ouvrir (JSON)</span><input type="file" id="loadFile" accept=".json,application/json"></label>
+          <p class="note" data-i18n="autosaveNote">Sauvegarde automatique dans ce navigateur.</p>
+        </div>
+      </details>
+      <p class="privacy"><span data-i18n="privacy">100 % local : aucun envoi, aucun suivi. Logiciel libre (MIT).</span> <a href="https://github.com/salimadour31-boop/animation-atelier" data-i18n="source">Code source</a></p>
+    </aside>
+  </main>
+  <p class="status" id="status" role="status" aria-live="polite"></p>
+
+  <dialog id="helpDlg" aria-labelledby="hHelp">
+    <h2 id="hHelp" data-i18n="shortcuts">Raccourcis clavier</h2>
+    <table class="keys">
+      <tr><td><kbd>←</kbd> / <kbd>→</kbd></td><td data-i18n="scPrevNext">Image précédente / suivante</td></tr>
+      <tr><td><kbd data-i18n="space">Espace</kbd></td><td data-i18n="scPlay">Lecture / pause</td></tr>
+      <tr><td><kbd>B</kbd></td><td data-i18n="scBrush">Pinceau</td></tr>
+      <tr><td><kbd>E</kbd></td><td data-i18n="scEraser">Gomme</td></tr>
+      <tr><td><kbd>O</kbd></td><td data-i18n="scOnion">Pelure d’oignon</td></tr>
+      <tr><td><kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Ctrl</kbd>+<kbd>Y</kbd></td><td data-i18n="scUndo">Annuler / rétablir</td></tr>
+      <tr><td><kbd>N</kbd> / <kbd>D</kbd></td><td data-i18n="scAdd">Ajouter / dupliquer une image</td></tr>
+      <tr><td><kbd>[</kbd> / <kbd>]</kbd></td><td data-i18n="scSize">Taille du pinceau − / +</td></tr>
+      <tr><td><kbd>?</kbd></td><td data-i18n="scHelp">Cette aide</td></tr>
+    </table>
+    <form method="dialog"><button class="btn primary" data-i18n="close">Fermer</button></form>
+  </dialog>
+
+  <script src="js/core.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
